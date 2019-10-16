@@ -4,8 +4,8 @@ import pygame
 
 class EndScene(Scene):
 
-    def __init__(self, display, id, w_size, connector):
-        super().__init__(display, id, w_size, connector)
+    def __init__(self, display, id, w_size, connector, resources):
+        super().__init__(display, id, w_size, connector, resources)
 
     def update(self):
         super().update()

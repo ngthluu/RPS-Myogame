@@ -23,8 +23,17 @@ pygame.font.init()
 pygame.display.set_caption(GAME_TITLE)
 game_display = pygame.display.set_mode(WORLD_SIZE)
 
+# Preload resources
+
+rock_img = pygame.image.load(r"..\Resource\Rock.png")
+paper_img = pygame.image.load(r"..\Resource\Paper.png")
+scissors_img = pygame.image.load(r"..\Resource\Scissors.png")
+
+resources = [rock_img, paper_img, scissors_img]
+
+# Scene manager
 scene_manager = SceneManager()
-scene_manager.set_scene(TutorialScene(game_display, 1, WORLD_SIZE, connector))
+scene_manager.set_scene(TutorialScene(game_display, 1, WORLD_SIZE, connector, resources))
 
 # Game loop
 if connector.init():
@@ -43,11 +52,11 @@ if connector.init():
 
         if scene_manager.get_scene().end():
             if scene_manager.get_scene().get_id() == 1:
-                scene_manager.set_scene(GameScene(game_display, 2, WORLD_SIZE, connector))
+                scene_manager.set_scene(GameScene(game_display, 2, WORLD_SIZE, connector, resources))
             elif scene_manager.get_scene().get_id() == 2:
-                scene_manager.set_scene(EndScene(game_display, 3, WORLD_SIZE, connector))
+                scene_manager.set_scene(EndScene(game_display, 3, WORLD_SIZE, connector, resources))
             elif scene_manager.get_scene().get_id() == 3:
-                scene_manager.set_scene(GameScene(game_display, 2, WORLD_SIZE, connector))
+                scene_manager.set_scene(GameScene(game_display, 2, WORLD_SIZE, connector, resources))
             else:
                 pass
         scene_manager.get_scene().update()

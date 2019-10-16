@@ -3,8 +3,16 @@ import pygame
 
 class TutorialScene(Scene):
 
-    def __init__(self, display, id, w_size, connector):
-        super().__init__(display, id, w_size, connector)
+    def __init__(self, display, id, w_size, connector, resources):
+        super().__init__(display, id, w_size, connector, resources)
+
+        # Init status text
+        self._status_text = pygame.font.Font(r"..\Resource\OpenSans-Regular.ttf", 32).render("Wave out a rock and hold on for 3 seconds !", 1, (0, 0, 0))
+        self._status_text_pos = (self._w_size[0] / 2, self._w_size[1] * 0.75)
+
+        self._rock = self._resources[0]
+        self._rock_pos = (self._w_size[0] / 2, self._w_size[1] * 0.35)
+        self._rock_size = self._rock.get_rect().size
 
     def update(self):
         super().update()
@@ -26,3 +34,5 @@ class TutorialScene(Scene):
 
     def render(self):
         super().render()
+        self._display.blit(self._status_text, fixPosition(self._status_text_pos, self._status_text.get_size()))
+        self._display.blit(self._rock, fixPosition(self._rock_pos, self._rock_size))
