@@ -34,5 +34,5 @@ class TutorialScene(Scene):
 
     def render(self):
         super().render()
-        self._display.blit(self._status_text, fixPosition(self._status_text_pos, self._status_text.get_size()))
-        self._display.blit(self._rock, fixPosition(self._rock_pos, self._rock_size))
+        self._display.blit(self._status_text, fix_pos(self._status_text_pos, self._status_text.get_size()))
+        self._display.blit(self._rock, fix_pos(self._rock_pos, self._rock_size))

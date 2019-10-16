@@ -1,4 +1,4 @@
-def fixPosition(pos, size):
+def fix_pos(pos, size):
     return (pos[0] - size[0] / 2, pos[1] - size[1] / 2)
 
 class Scene:
