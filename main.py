@@ -55,4 +55,5 @@ if connector.init():
 
         pygame.display.update()
 else:
+    connector.close()
     print("Unable to connect to the Myo Armband !")
