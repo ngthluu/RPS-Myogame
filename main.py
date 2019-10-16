@@ -13,7 +13,7 @@ WORLD_COLOR = 255, 255, 255
 GAME_TITLE = "RPS - Myo Demo V1.0.0"
 
 # Game variables
-os.chdir(os.getcwd() + r"\lib")
+os.chdir(os.getcwd() + r"\Library")
 connector = ctypes.cdll.LoadLibrary(os.getcwd() + r"\MyoData.dll")
 
 # Game init
