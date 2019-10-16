@@ -20,6 +20,7 @@ class TutorialScene(Scene):
         self._on_scissors_time = False
 
         self._timer = 0
+        
 
     def update(self):
         super().update()
@@ -32,9 +33,9 @@ class TutorialScene(Scene):
 #               self._on_paper_time = True
 #               self._timer = 0
 
-        pointer_accel = self._connector.get_accel()
-        temp = (ctypes.c_float * 3).from_address(pointer_accel)
-        data_list = [temp[i] for i in range(3)]
+        pointer_accel = self._connector.get_rotation()
+        temp = (ctypes.c_float * 4).from_address(pointer_accel)
+        data_list = [temp[i] for i in range(4)]
         print(data_list)
 
         # Event handling
