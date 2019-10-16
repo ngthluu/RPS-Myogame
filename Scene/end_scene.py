@@ -4,14 +4,16 @@ import pygame
 
 class EndScene(Scene):
 
-    def __init__(self, display, id, w_size):
-        super().__init__(display, id, w_size)
+    def __init__(self, display, id, w_size, connector):
+        super().__init__(display, id, w_size, connector)
 
     def update(self):
         super().update()
         # Event handling
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                print("Exiting...")
+                self._connector.close()
                 pygame.quit()
                 exit()
             elif event.type == pygame.KEYDOWN:
