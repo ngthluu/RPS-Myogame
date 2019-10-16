@@ -1,5 +1,6 @@
 from Scene.scene import *
 import pygame
+import ctypes
 
 class TutorialScene(Scene):
 
@@ -13,9 +14,29 @@ class TutorialScene(Scene):
         self._rock = self._resources[0]
         self._rock_pos = (self._w_size[0] / 2, self._w_size[1] * 0.35)
         self._rock_size = self._rock.get_rect().size
+        
+        self._on_rock_time = True
+        self._on_paper_time = False
+        self._on_scissors_time = False
+
+        self._timer = 0
 
     def update(self):
         super().update()
+
+        #if self._on_rock_time:
+        #    self._timer += 1 / 60
+#
+#           if self._timer > 3:
+#               self._on_rock_time = False
+#               self._on_paper_time = True
+#               self._timer = 0
+
+        pointer_accel = self._connector.get_accel()
+        temp = (ctypes.c_float * 3).from_address(pointer_accel)
+        data_list = [temp[i] for i in range(3)]
+        print(data_list)
+
         # Event handling
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

@@ -39,12 +39,8 @@ scene_manager.set_scene(TutorialScene(game_display, 1, WORLD_SIZE, connector, re
 if connector.init():
 
     while True:
-        # Get data
+        # Run the connector
         connector.run(FPS)
-        pointer_emg = connector.get_emg_data()
-        temp = (ctypes.c_int * 8).from_address(pointer_emg)
-        data_list = [temp[i] for i in range(8)]
-        print(data_list)
 
         # Updating game
         pygame.time.delay(1000 // FPS)
