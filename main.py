@@ -33,17 +33,17 @@ resources = [rock_img, paper_img, scissors_img]
 
 # Scene manager
 scene_manager = SceneManager()
-scene_manager.set_scene(TutorialScene(game_display, 1, WORLD_SIZE, connector, resources))
 
 # Game loop
 if connector.init():
+
+    scene_manager.set_scene(TutorialScene(game_display, 1, WORLD_SIZE, connector, resources))
 
     while True:
         # Run the connector
         connector.run(FPS)
 
         # Updating game
-        pygame.time.delay(1000 // FPS)
         game_display.fill(WORLD_COLOR)
 
         if scene_manager.get_scene().end():
@@ -59,6 +59,7 @@ if connector.init():
         scene_manager.get_scene().render()
 
         pygame.display.update()
+        pygame.time.delay(1000 // FPS)
 else:
     connector.close()
     print("Unable to connect to the Myo Armband !")
