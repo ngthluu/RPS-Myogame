@@ -7,7 +7,7 @@ from Scene.game_scene import GameScene
 from Scene.end_scene import EndScene
 
 # Game constants
-FPS = 60
+FPS = 100
 WORLD_SIZE = WIDTH, HEIGHT = 960, 600
 WORLD_COLOR = 255, 255, 255
 GAME_TITLE = "RPS - Myo Demo V1.0.0"
