@@ -6,14 +6,16 @@ from Data.rec_data import *
 class GameScene(Scene):
 
     def __init__(self, display, id, w_size, connector, resources):
+
         print("Game Scene")
+        
         super().__init__(display, id, w_size, connector, resources)
         
         # Constants
         self.GET_DATA_TIME = 1.0
 
         self._data_trainer = DataTrainer()
-        self.NUM_OF_INPUT_SAMPLE = 35
+        self.NUM_OF_INPUT_SAMPLE = DataTrainer.NUM_OF_INPUT_SAMPLE
         self._input_data = []
 
         self._connector = connector
@@ -49,14 +51,14 @@ class GameScene(Scene):
         else:
             if self._timer <= self.GET_DATA_TIME:
                 self._timer += self._clock.tick() / 1000
-                temp = (ctypes.c_int * 8).from_address(self._ptr_emg_data)
-                self._input_data.append([temp[i] for i in range(8)])
+                temp = (ctypes.c_int * DataTrainer.NUM_OF_SENSORS).from_address(self._ptr_emg_data)
+                self._input_data.append([temp[i] for i in range(DataTrainer.NUM_OF_SENSORS)])
             else:
                 # Finish delta_time second
                 self._timer = 0
                 self._has_wave = False
 
-                print(self._data_trainer.predict(self._input_data[:35]))
+                print(self._data_trainer.predict(self._input_data[:DataTrainer.NUM_OF_INPUT_SAMPLE]))
                 self._input_data = []
                 
 

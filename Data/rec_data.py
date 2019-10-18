@@ -5,16 +5,18 @@ from sklearn.ensemble import RandomForestClassifier
 from collections import Counter
 import pickle
 
+
 class DataTrainer:
+
+    NUM_OF_SENSORS = 8
+    NUM_OF_EACH_NGRAM = 5
+
+    NUM_OF_INPUT_SAMPLE = 35
+    NUM_OF_TRAINING_SAMPLE = 150
+    MODEL_FILE_NAME = "User_Profile.sav"
+    MODEL_FILE_PATH = "../Data/" + MODEL_FILE_NAME
     
     def __init__(self, train_data = []):
-       
-        self.NUM_OF_SENSORS = 8
-        self.NUM_OF_EACH_NGRAM = 5
-
-        self.NUM_OF_INPUT_SAMPLE = 35
-        self.MODEL_FILE_NAME = "User_Profile.sav"
-        self.MODEL_FILE_PATH = "../Data/" + self.MODEL_FILE_NAME
 
         self._train_data = np.array(train_data) # [[], [], []]
         print(self._train_data)
@@ -22,25 +24,23 @@ class DataTrainer:
 
         self._model = None
 
-        if os.path.isfile(self.MODEL_FILE_PATH):
-            with open(self.MODEL_FILE_PATH, 'rb') as f:
+        if os.path.isfile(DataTrainer.MODEL_FILE_PATH):
+            with open(DataTrainer.MODEL_FILE_PATH, 'rb') as f:
                 self._model = pickle.load(f)
     
     def train(self):
 
         if self._model == None:
 
-            print ("TRAINING !")
-
             # Define model
-            RF_model = RandomForestClassifier(n_estimators=int(self.NUM_OF_SENSORS * 1.5))
+            RF_model = RandomForestClassifier(n_estimators=int(NUM_OF_SENSORS * 1.5))
 
             # Prepare data
             X = list()
             y = list()
             for label_index, eachSample in enumerate(self._train_data):
-                for i in range(eachSample.shape[0] - self.NUM_OF_EACH_NGRAM + 1):
-                    X.append(eachSample[i: i + self.NUM_OF_EACH_NGRAM].flatten())
+                for i in range(eachSample.shape[0] - DataTrainer.NUM_OF_EACH_NGRAM + 1):
+                    X.append(eachSample[i: i + DataTrainer.NUM_OF_EACH_NGRAM].flatten())
                     y.append(self._train_label[label_index])
 
             RF_model.fit(X, y)
@@ -51,10 +51,8 @@ class DataTrainer:
         
             self._model = RF_model
 
-            print("END TRAINING !")
-
     def predict(self, input):
-        input = np.reshape(input, (-1, self.NUM_OF_EACH_NGRAM, self.NUM_OF_SENSORS))
+        input = np.reshape(input, (-1, DataTrainer.NUM_OF_EACH_NGRAM, DataTrainer.NUM_OF_SENSORS))
         input = [x.flatten() for x in input]
         
         results = self._model.predict(input)

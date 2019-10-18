@@ -6,12 +6,15 @@ from Data.rec_data import *
 class TutorialScene(Scene):
 
     def __init__(self, display, id, w_size, connector, resources):
+
+        print ("Tutorial Scene")
+
         super().__init__(display, id, w_size, connector, resources)
 
         # Constants
 
         self.GET_DATA_TIME = 4.25
-
+        
         self.ROCK_TITLE = "Wave out a rock and hold on for "+str(int(self.GET_DATA_TIME))+" seconds !"
         self.PAPER_TITLE = "Wave out a paper and hold on for "+str(int(self.GET_DATA_TIME))+" seconds !"
         self.SCISSORS_TITLE = "Wave out a scissors and hold on for "+str(int(self.GET_DATA_TIME))+" seconds !"
@@ -49,7 +52,7 @@ class TutorialScene(Scene):
         self._movement_accel = [(0, 0, 0), (0, 0 ,0)]
         self._has_wave = False
 
-        if os.path.isfile('../Data/User_Profile.sav'):
+        if os.path.isfile(DataTrainer.MODEL_FILE_PATH):
             self._isEndScene = True
 
     def update(self):
@@ -75,13 +78,13 @@ class TutorialScene(Scene):
         else:
             if self._timer <= self.GET_DATA_TIME:
                 self._timer += self._clock.tick() / 1000
-                temp = (ctypes.c_int * 8).from_address(self._ptr_emg_data)
+                temp = (ctypes.c_int * DataTrainer.NUM_OF_SENSORS).from_address(self._ptr_emg_data)
                 if self._on_rock_time:
-                    self._rock_data.append([temp[i] for i in range(8)])
+                    self._rock_data.append([temp[i] for i in range(DataTrainer.NUM_OF_SENSORS)])
                 elif self._on_paper_time:
-                    self._paper_data.append([temp[i] for i in range(8)])
+                    self._paper_data.append([temp[i] for i in range(DataTrainer.NUM_OF_SENSORS)])
                 elif self._on_scissors_time:
-                    self._scissors_data.append([temp[i] for i in range(8)])
+                    self._scissors_data.append([temp[i] for i in range(DataTrainer.NUM_OF_SENSORS)])
             else:
                 # Finish delta_time second
                 self._timer = 0
@@ -97,7 +100,7 @@ class TutorialScene(Scene):
                 
                 elif self._on_scissors_time:
                     self._on_scissors_time = False
-                    data_trainer = DataTrainer([self._rock_data[:150], self._paper_data[:150], self._scissors_data[:150]])       
+                    data_trainer = DataTrainer([self._rock_data[:DataTrainer.NUM_OF_TRAINING_SAMPLE], self._paper_data[:DataTrainer.NUM_OF_TRAINING_SAMPLE], self._scissors_data[:DataTrainer.NUM_OF_TRAINING_SAMPLE]])       
                     data_trainer.train() 
                     self._isEndScene = True        
 
