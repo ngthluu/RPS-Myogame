@@ -1,6 +1,7 @@
 from Scene.scene import *
 import pygame
 import ctypes
+from Data.rec_data import *
 
 class TutorialScene(Scene):
 
@@ -48,6 +49,9 @@ class TutorialScene(Scene):
         self._movement_accel = [(0, 0, 0), (0, 0 ,0)]
         self._has_wave = False
 
+        if os.path.isfile('../Data/User_Profile.sav'):
+            self._isEndScene = True
+
     def update(self):
         super().update()
 
@@ -66,7 +70,6 @@ class TutorialScene(Scene):
                 x = self._movement_accel[1][0]
                 # Wave down
                 if x - ox < -0.75 and ox != 0:
-                    print((ox, x))
                     self._has_wave = True
                     
         else:
@@ -80,26 +83,23 @@ class TutorialScene(Scene):
                 elif self._on_scissors_time:
                     self._scissors_data.append([temp[i] for i in range(8)])
             else:
-                # Finish 3 second
+                # Finish delta_time second
                 self._timer = 0
+                self._has_wave = False
+
                 if self._on_rock_time:
                     self._on_rock_time = False
                     self._on_paper_time = True
-                    self._has_wave = False
 
                 elif self._on_paper_time:
                     self._on_paper_time = False
                     self._on_scissors_time = True
-                    self._has_wave = False
                 
                 elif self._on_scissors_time:
                     self._on_scissors_time = False
-                    self._has_wave = False
-                    print(len(self._rock_data))
-                    print(len(self._paper_data))
-                    print(len(self._scissors_data))
-                    self._isEndScene = True
-                
+                    data_trainer = DataTrainer([self._rock_data[:150], self._paper_data[:150], self._scissors_data[:150]])       
+                    data_trainer.train() 
+                    self._isEndScene = True        
 
         # Event handling
         for event in pygame.event.get():
