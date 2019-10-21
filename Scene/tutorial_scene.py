@@ -13,7 +13,7 @@ class TutorialScene(Scene):
 
         # Constants
 
-        self.GET_DATA_TIME = 4.25
+        self.GET_DATA_TIME = 3.9
         
         self.ROCK_TITLE = "Wave out a rock and hold on for "+str(int(self.GET_DATA_TIME))+" seconds !"
         self.PAPER_TITLE = "Wave out a paper and hold on for "+str(int(self.GET_DATA_TIME))+" seconds !"
@@ -43,8 +43,6 @@ class TutorialScene(Scene):
         self._scissors_data = []
 
         self._ptr_accel = self._connector.get_accel()
-        self._ptr_rotation = self._connector.get_rotation()
-        self._ptr_gyro = self._connector.get_gyro()
         self._ptr_emg_data = self._connector.get_emg_data()
 
         self._clock = pygame.time.Clock()
@@ -64,6 +62,7 @@ class TutorialScene(Scene):
                 if self._timer == 0:
                     temp = (ctypes.c_float * 3).from_address(self._ptr_accel)
                     self._movement_accel[0] = [temp[i] for i in range(3)]
+                self.collect_data()
                 self._timer += self._clock.tick() / 1000
             else:
                 self._timer = 0
@@ -74,31 +73,30 @@ class TutorialScene(Scene):
                 # Wave down
                 if x - ox < -0.75 and ox != 0:
                     self._has_wave = True
+                else:
+                    self.reset_data()
                     
         else:
             if self._timer <= self.GET_DATA_TIME:
                 self._timer += self._clock.tick() / 1000
-                temp = (ctypes.c_int * DataTrainer.NUM_OF_SENSORS).from_address(self._ptr_emg_data)
-                if self._on_rock_time:
-                    self._rock_data.append([temp[i] for i in range(DataTrainer.NUM_OF_SENSORS)])
-                elif self._on_paper_time:
-                    self._paper_data.append([temp[i] for i in range(DataTrainer.NUM_OF_SENSORS)])
-                elif self._on_scissors_time:
-                    self._scissors_data.append([temp[i] for i in range(DataTrainer.NUM_OF_SENSORS)])
+                self.collect_data()
             else:
                 # Finish delta_time second
                 self._timer = 0
                 self._has_wave = False
 
                 if self._on_rock_time:
+                    #print(len(self._rock_data))
                     self._on_rock_time = False
                     self._on_paper_time = True
 
                 elif self._on_paper_time:
+                    #print(len(self._paper_data))
                     self._on_paper_time = False
                     self._on_scissors_time = True
                 
                 elif self._on_scissors_time:
+                    #print(len(self._scissors_data))
                     self._on_scissors_time = False
                     data_trainer = DataTrainer([self._rock_data[:DataTrainer.NUM_OF_TRAINING_SAMPLE], self._paper_data[:DataTrainer.NUM_OF_TRAINING_SAMPLE], self._scissors_data[:DataTrainer.NUM_OF_TRAINING_SAMPLE]])       
                     data_trainer.train() 
@@ -137,3 +135,20 @@ class TutorialScene(Scene):
 
         self._display.blit(self._status_text, fix_pos(self._status_text_pos, self._status_text.get_size()))
         self._display.blit(self._img, fix_pos(self._img_pos, self._img_size))
+
+    def collect_data(self):
+        temp = (ctypes.c_int * DataTrainer.NUM_OF_SENSORS).from_address(self._ptr_emg_data)
+        if self._on_rock_time:
+            self._rock_data.append([temp[i] for i in range(DataTrainer.NUM_OF_SENSORS)])
+        elif self._on_paper_time:
+            self._paper_data.append([temp[i] for i in range(DataTrainer.NUM_OF_SENSORS)])
+        elif self._on_scissors_time:
+            self._scissors_data.append([temp[i] for i in range(DataTrainer.NUM_OF_SENSORS)])
+
+    def reset_data(self):
+        if self._on_rock_time:
+            self._rock_data = []
+        elif self._on_paper_time:
+            self._paper_data = []
+        elif self._on_scissors_time:
+            self._scissors_data = []

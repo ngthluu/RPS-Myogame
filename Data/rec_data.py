@@ -19,7 +19,6 @@ class DataTrainer:
     def __init__(self, train_data = []):
 
         self._train_data = np.array(train_data) # [[], [], []]
-        print(self._train_data)
         self._train_label = [0, 1, 2]
 
         self._model = None
@@ -33,7 +32,7 @@ class DataTrainer:
         if self._model == None:
 
             # Define model
-            RF_model = RandomForestClassifier(n_estimators=int(NUM_OF_SENSORS * 1.5))
+            RF_model = RandomForestClassifier(n_estimators=int(DataTrainer.NUM_OF_SENSORS * 1.5))
 
             # Prepare data
             X = list()
@@ -46,7 +45,7 @@ class DataTrainer:
             RF_model.fit(X, y)
 
             # Save model
-            with open(self.MODEL_FILE_PATH, 'wb') as f:
+            with open(DataTrainer.MODEL_FILE_PATH, 'wb') as f:
                 pickle.dump(RF_model, f)
         
             self._model = RF_model
