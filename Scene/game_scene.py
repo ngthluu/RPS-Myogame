@@ -12,7 +12,7 @@ class GameScene(Scene):
         super().__init__(display, id, w_size, connector, resources)
         
         # Constants
-        self.GET_DATA_TIME = 1.0
+        self.GET_DATA_TIME = 1.25
 
         self._data_trainer = DataTrainer()
         self.NUM_OF_INPUT_SAMPLE = DataTrainer.NUM_OF_INPUT_SAMPLE
@@ -27,6 +27,15 @@ class GameScene(Scene):
         self._timer = 0
         self._movement_accel = [(0, 0, 0), (0, 0, 0)]
         self._has_wave = False
+
+        self._turn_number = 0
+
+        self._render_imgs = []
+        offset = (self._w_size[0] - self._resources[3].get_rect().size[0] * 3) // 2, (self._w_size[1] - self._resources[3].get_rect().size[1] * 2) // 2
+        for i in range(6):  
+            original_pos = (i % 3) * self._resources[3].get_rect().size[0], (i // 3) * self._resources[3].get_rect().size[1]
+            pos = tuple(map(lambda x, y: x + y, offset, original_pos))
+            self._render_imgs.append([self._resources[3], pos])
 
     def update(self):
 
@@ -61,7 +70,12 @@ class GameScene(Scene):
 
                 print(len(self._input_data))
 
-                print(self._data_trainer.predict(self._input_data[:DataTrainer.NUM_OF_INPUT_SAMPLE]))
+                predict_result = self._data_trainer.predict(self._input_data[:DataTrainer.NUM_OF_INPUT_SAMPLE])
+                self._render_imgs[self._turn_number + 3][0] = self._resources[predict_result]
+                
+                if self._turn_number < 2:
+                    self._turn_number = self._turn_number + 1
+
                 self._input_data = []
                 
 
@@ -81,3 +95,6 @@ class GameScene(Scene):
 
     def render(self):
         super().render()
+
+        for i in range(6):
+            self._display.blit(self._render_imgs[i][0], self._render_imgs[i][1])
