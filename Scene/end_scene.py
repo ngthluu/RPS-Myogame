@@ -7,8 +7,13 @@ class EndScene(Scene):
     def __init__(self, display, id, w_size, connector, resources):
         super().__init__(display, id, w_size, connector, resources)
 
+        #Constants
+        self.FONT_PATH = r"..\Resource\OpenSans-Regular.ttf"
+
         self._status_font = pygame.font.Font(self.FONT_PATH, 40)
-        self._status_text = self._status_font.render("You think you can beat my bot? Let's try", 0, (0, 0, 0))
+        self._status_text = self._status_font.render("Better luck next time ", 0, (0, 0, 0))
+
+        self._resources[6] = pygame.transform.scale(self._resources[6], (125, 125))
 
     def update(self):
         super().update()
@@ -28,3 +33,6 @@ class EndScene(Scene):
 
     def render(self):
         super().render()
+
+        self._display.blit(self._status_text, fix_pos([self._w_size[0] * 0.45, self._w_size[1] // 2], self._status_text.get_size()))
+        self._display.blit(self._resources[6], (650, 230))

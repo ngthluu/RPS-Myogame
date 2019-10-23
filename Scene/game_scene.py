@@ -19,6 +19,8 @@ class GameScene(Scene):
         self._intro_font = pygame.font.Font(self.FONT_PATH, 40)
         self._info_text = self._intro_font.render("You think you can beat my bot? Let's try", 0, (0, 0, 0))
 
+        self._trans_to_next_scene = False
+
         self._data_trainer = DataTrainer()
         self.NUM_OF_INPUT_SAMPLE = DataTrainer.NUM_OF_INPUT_SAMPLE
         self._input_data = []
@@ -54,6 +56,12 @@ class GameScene(Scene):
             if self._timer >= 3.0:
                 self._timer = 0
                 self._is_in_intro = False
+        
+        elif self._trans_to_next_scene:
+            self._timer += self._clock.tick() / 1000
+            if self._timer >= 3.0:
+                self._isEndScene = True
+
         else:
             if not self._has_wave:
                 if self._timer <= 0.25:
@@ -79,6 +87,7 @@ class GameScene(Scene):
                     self._input_data.append([temp[i] for i in range(DataTrainer.NUM_OF_SENSORS)])
                 else:
                     # Finish delta_time second
+
                     self._timer = 0
                     self._has_wave = False
 
@@ -90,8 +99,9 @@ class GameScene(Scene):
                 
                     if self._turn_number < 2:
                         self._turn_number = self._turn_number + 1
+                    
                     else:
-                        self._isEndScene = True
+                        self._trans_to_next_scene = True
 
                     self._input_data = []
                 
