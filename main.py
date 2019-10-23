@@ -30,7 +30,10 @@ paper_img = pygame.image.load(r"..\Resource\Paper.png")
 scissors_img = pygame.image.load(r"..\Resource\Scissors.png")
 mystery_img = pygame.image.load(r"..\Resource\Mystery.png")
 
-resources = [rock_img, paper_img, scissors_img, mystery_img]
+human_img = pygame.image.load(r"..\Resource\Human.jpg")
+robot_img = pygame.image.load(r"..\Resource\Robot.png")
+
+resources = [rock_img, paper_img, scissors_img, mystery_img, human_img, robot_img]
 
 # Scene manager
 scene_manager = SceneManager()

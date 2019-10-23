@@ -30,10 +30,13 @@ class GameScene(Scene):
 
         self._turn_number = 0
 
+        for i in range(len(self._resources)):
+            self._resources[i] = pygame.transform.scale(self._resources[i], (125, 125))
+
         self._render_imgs = []
-        offset = (self._w_size[0] - self._resources[3].get_rect().size[0] * 3) // 2, (self._w_size[1] - self._resources[3].get_rect().size[1] * 2) // 2
+        offset = (self._w_size[0] - self._resources[3].get_rect().size[0] * 3 * 1.2) // 2, (self._w_size[1] - self._resources[3].get_rect().size[1] * 2 * 1.2) // 2
         for i in range(6):  
-            original_pos = (i % 3) * self._resources[3].get_rect().size[0], (i // 3) * self._resources[3].get_rect().size[1]
+            original_pos = (i % 3) * self._resources[3].get_rect().size[0] * 1.2, (i // 3) * self._resources[3].get_rect().size[1] * 1.2
             pos = tuple(map(lambda x, y: x + y, offset, original_pos))
             self._render_imgs.append([self._resources[3], pos])
 
@@ -72,6 +75,7 @@ class GameScene(Scene):
 
                 predict_result = self._data_trainer.predict(self._input_data[:DataTrainer.NUM_OF_INPUT_SAMPLE])
                 self._render_imgs[self._turn_number + 3][0] = self._resources[predict_result]
+                self._render_imgs[self._turn_number][0] = self._resources[(predict_result + 1) % 3]
                 
                 if self._turn_number < 2:
                     self._turn_number = self._turn_number + 1
