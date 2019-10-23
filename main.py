@@ -28,8 +28,9 @@ game_display = pygame.display.set_mode(WORLD_SIZE)
 rock_img = pygame.image.load(r"..\Resource\Rock.png")
 paper_img = pygame.image.load(r"..\Resource\Paper.png")
 scissors_img = pygame.image.load(r"..\Resource\Scissors.png")
+mystery_img = pygame.image.load(r"..\Resource\Mystery.png")
 
-resources = [rock_img, paper_img, scissors_img]
+resources = [rock_img, paper_img, scissors_img, mystery_img]
 
 # Scene manager
 scene_manager = SceneManager()

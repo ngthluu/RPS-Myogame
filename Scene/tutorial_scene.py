@@ -13,7 +13,7 @@ class TutorialScene(Scene):
 
         # Constants
 
-        self.GET_DATA_TIME = 4.5
+        self.GET_DATA_TIME = 4.25
         
         self.ROCK_TITLE = "Wave out a rock and hold on for "+str(int(self.GET_DATA_TIME))+" seconds !"
         self.PAPER_TITLE = "Wave out a paper and hold on for "+str(int(self.GET_DATA_TIME))+" seconds !"
