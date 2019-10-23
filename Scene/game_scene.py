@@ -12,7 +12,7 @@ class GameScene(Scene):
         super().__init__(display, id, w_size, connector, resources)
         
         # Constants
-        self.GET_DATA_TIME = 0.6
+        self.GET_DATA_TIME = 1.0
 
         self._data_trainer = DataTrainer()
         self.NUM_OF_INPUT_SAMPLE = DataTrainer.NUM_OF_INPUT_SAMPLE
@@ -39,9 +39,6 @@ class GameScene(Scene):
                     self._movement_accel[0] = [temp[i] for i in range(3)]
                 self._timer += self._clock.tick() / 1000
                 
-                # Append input data
-                temp = (ctypes.c_int * DataTrainer.NUM_OF_SENSORS).from_address(self._ptr_emg_data)
-                self._input_data.append([temp[i] for i in range(DataTrainer.NUM_OF_SENSORS)])
             else:
                 self._timer = 0
                 temp = (ctypes.c_float * 3).from_address(self._ptr_accel)
@@ -51,8 +48,6 @@ class GameScene(Scene):
                 # Wave down
                 if x - ox < -0.7 and ox != 0:
                     self._has_wave = True
-                else:
-                    self._input_data = []
         
         else:
             if self._timer <= self.GET_DATA_TIME:

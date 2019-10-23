@@ -13,7 +13,7 @@ class TutorialScene(Scene):
 
         # Constants
 
-        self.GET_DATA_TIME = 3.9
+        self.GET_DATA_TIME = 4.5
         
         self.ROCK_TITLE = "Wave out a rock and hold on for "+str(int(self.GET_DATA_TIME))+" seconds !"
         self.PAPER_TITLE = "Wave out a paper and hold on for "+str(int(self.GET_DATA_TIME))+" seconds !"
@@ -62,7 +62,6 @@ class TutorialScene(Scene):
                 if self._timer == 0:
                     temp = (ctypes.c_float * 3).from_address(self._ptr_accel)
                     self._movement_accel[0] = [temp[i] for i in range(3)]
-                self.collect_data()
                 self._timer += self._clock.tick() / 1000
             else:
                 self._timer = 0
@@ -73,8 +72,6 @@ class TutorialScene(Scene):
                 # Wave down
                 if x - ox < -0.75 and ox != 0:
                     self._has_wave = True
-                else:
-                    self.reset_data()
                     
         else:
             if self._timer <= self.GET_DATA_TIME:
@@ -86,17 +83,17 @@ class TutorialScene(Scene):
                 self._has_wave = False
 
                 if self._on_rock_time:
-                    #print(len(self._rock_data))
+                    print(len(self._rock_data))
                     self._on_rock_time = False
                     self._on_paper_time = True
 
                 elif self._on_paper_time:
-                    #print(len(self._paper_data))
+                    print(len(self._paper_data))
                     self._on_paper_time = False
                     self._on_scissors_time = True
                 
                 elif self._on_scissors_time:
-                    #print(len(self._scissors_data))
+                    print(len(self._scissors_data))
                     self._on_scissors_time = False
                     data_trainer = DataTrainer([self._rock_data[:DataTrainer.NUM_OF_TRAINING_SAMPLE], self._paper_data[:DataTrainer.NUM_OF_TRAINING_SAMPLE], self._scissors_data[:DataTrainer.NUM_OF_TRAINING_SAMPLE]])       
                     data_trainer.train() 
